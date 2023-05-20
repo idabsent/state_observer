@@ -1,11 +1,9 @@
 #!/usr/bin/bash
 
-declare FILE_PATH
 declare IP_ADDRESS
 declare PORT
 declare -x EXAMPLE=help
 
-declare OPT_FILE_PATH=f
 declare OPT_IP_ADDRESS=i
 declare OPT_PORT=p
 
@@ -22,10 +20,9 @@ declare -f observer
 declare -f date_file_format
 
 function main() {
-    local options=":$OPT_FILE_PATH:$OPT_IP_ADDRESS:$OPT_PORT:"
+    local options=":$OPT_IP_ADDRESS:$OPT_PORT:"
     while getopts $options ARG; do
         case $ARG in
-        "$OPT_FILE_PATH") FILE_PATH=$OPTARG;;
         "$OPT_IP_ADDRESS") IP_ADDRESS=$OPTARG;;
         "$OPT_PORT") PORT=$OPTARG;;
         *) usage;;
@@ -50,10 +47,6 @@ function check_args()
 {
     declare uncorrect=false
 
-    if [ -z "$FILE_PATH" ] 
-    then echo "Missing option $OPT_FILE_PATH..."; uncorrect=true
-    fi
-
     if [ -z "$IP_ADDRESS" ] 
     then echo "Missing option $OPT_IP_ADDRESS..."; uncorrect=true
     fi
@@ -76,7 +69,6 @@ Observe process line througth listen on specific port
     declare DESCRIPTION=$(echo $DESCRIPTION | xargs)
     
     echo -e "$PROGRAM_NAME : $DESCRIPTION"
-    echo -e "\t-$OPT_FILE_PATH ${OPT_DESCRIPTIONS["$OPT_FILE_PATH"]}"
     echo -e "\t-$OPT_IP_ADDRESS ${OPT_DESCRIPTIONS["$OPT_IP_ADDRESS"]}"
     echo -e "\t-$OPT_PORT ${OPT_DESCRIPTIONS["$OPT_PORT"]}"
 
@@ -85,9 +77,6 @@ Observe process line througth listen on specific port
 
 function fill_descriptions() 
 {
-    local D_FILE_PATH="
-FILE\tPath to FILE
-    "
     local D_IP_ADDRESS="
 IP\tThe listen ip address. Listen to IP:PORT
     "
@@ -95,7 +84,6 @@ IP\tThe listen ip address. Listen to IP:PORT
 PORT\tThe listen ip port. Listen to IP:PORT
     "
 
-    OPT_DESCRIPTIONS["$OPT_FILE_PATH"]=$(lrtrim "$D_FILE_PATH")
     OPT_DESCRIPTIONS["$OPT_IP_ADDRESS"]=$(lrtrim "$D_IP_ADDRESS")
     OPT_DESCRIPTIONS["$OPT_PORT"]=$(lrtrim "$D_PORT")
 }
